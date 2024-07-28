@@ -1,3 +1,4 @@
 .env
 minecraft-server
 *.tmp
+minecraft-discord-bot
