@@ -1,6 +1,17 @@
 # minecraft-server
 mc server bot and, plugin to allow for a compsoc whitelist
 
+## Discord Bot
+
+Env vars:
+
+| Env Var | Description |
+|---|---|
+| BOT_TOKEN | Discord bot token, go to https://discord.com/developers/applications |
+| DATABASE_URL | Gorm.io database url, go to https://gorm.io/docs/connecting_to_the_database.html |
+
+Health check server is on `:8080`
+
 ## User flow
 
 ### 1 Register User

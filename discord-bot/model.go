@@ -40,7 +40,6 @@ type DiscordMinecraftUser struct {
 	DiscordUserID   string    `gorm:"foriegnKey:DiscordUser.DiscordUserID,index,unique,composite:discord_minecraft_user"`
 	MinecraftUserID uuid.UUID `gorm:"foreignKey:MinecraftUser.Id,index,unique,composite:discord_minecraft_user"`
 	Verified        bool
-	Banned          bool
 }
 
 type MinecraftUser struct {

@@ -110,7 +110,7 @@ func (c *SetupCommand) Execute(ctx *Context) bool {
 	message := fmt.Sprintf(`**Reconfigured by:** <@%s>
 **Admin Role:** <@&%s>
 **Access Role:** <@&%s>
-**Allow Registrations:** %b
+**Allow Registrations:** %t
 **Max Accounts Per User:** %d`,
 		ctx.interaction.Member.User.Id,
 		adminRole,
@@ -128,6 +128,6 @@ func (c *SetupCommand) Execute(ctx *Context) bool {
 		&discord.InteractionCallbackMessage{Embeds: []*embed.Embed{e.Embed()},
 			Flags: discord.MessageFlagUrgent})
 
-	log.Print("<@%s> changed the configuration, see discord for further details", ctx.interaction.Member.User.Id)
+	log.Printf("<@%s> changed the configuration, see discord for further details", ctx.interaction.Member.User.Id)
 	return true
 }

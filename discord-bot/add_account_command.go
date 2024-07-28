@@ -121,10 +121,15 @@ If this is in fault please contact <@&%s>`, gs.AdminRole))
 			return errors.New("Maximum user count has been reached for your account.")
 		}
 
+		mcUser, err := GetMinecraftUser(accountName)
+		if err != nil {
+			return err
+		}
+
 		// Create a new unverified user
 		minecraftUser := MinecraftUser{
-			Username:      accountName,
-			Banned:        false,
+			Id:            mcUser.Id,
+			Username:      mcUser.Name,
 			LastIpAddress: SetInet("0.0.0.0"),
 		}
 		mdl = tx.Model(&minecraftUser)
@@ -138,22 +143,14 @@ If this is in fault please contact <@&%s>`, gs.AdminRole))
 			return err
 		}
 
-		if minecraftUser.Banned {
-			return errors.New(fmt.Sprintf(`This Minecraft user has already been banned.
-        If this is in fault please contact <@&%s>`, gs.AdminRole))
-		}
-
 		// Update verification number
 		mdl.Updates(map[string]interface{}{"VerificationNumber": rand.Intn(MAX_VERIFCATION_NUMBER)})
-		if err != nil {
-			return err
-		}
 
 		// Add discord minecraft user
 		discordMinecraftUser := DiscordMinecraftUser{
-			DiscordUserID: ctx.interaction.Member.User.Id,
-			MinecraftUserID: accountName,
-			Verified:      false,
+			DiscordUserID:   ctx.interaction.Member.User.Id,
+			MinecraftUserID: mcUser.Id,
+			Verified:        false,
 		}
 		mdl = tx.Model(&discordMinecraftUser)
 		err = mdl.Error

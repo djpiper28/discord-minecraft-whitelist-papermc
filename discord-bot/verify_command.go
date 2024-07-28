@@ -90,7 +90,12 @@ func (c *VerifyCommand) Execute(ctx *Context) bool {
 			return err
 		}
 
-		err = dcmcmdl.First(&dcmcUser, "discord_user_id = ? AND minecraft_user = ?", ctx.interaction.Member.User.Id, accountName).Error
+    userLookup, err := GetMinecraftUser(accountName)
+    if err != nil {
+      return err
+    }
+
+		err = dcmcmdl.First(&dcmcUser, "discord_user_id = ? AND minecraft_user_id = ?", ctx.interaction.Member.User.Id, userLookup.Id).Error
 		if err != nil {
 			return err
 		}
@@ -107,7 +112,7 @@ func (c *VerifyCommand) Execute(ctx *Context) bool {
 			return err
 		}
 
-		err = mdl.Select("username", "verification_number", "banned").First(&mcUser, "username = ?", accountName).Error
+		err = mdl.Select("username", "verification_number").First(&mcUser, "username = ?", accountName).Error
 		if err != nil {
 			return err
 		}

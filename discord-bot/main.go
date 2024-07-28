@@ -125,6 +125,9 @@ func main() {
 
 	// Keep bot running
 	log.Print("Bot started")
+
+  go HealthCheckServer()
+
 	//go UpdateThread()
 	select {}
 }
