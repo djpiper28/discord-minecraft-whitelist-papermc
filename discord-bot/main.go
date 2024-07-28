@@ -9,7 +9,6 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"log"
-	"math/rand"
 	"os"
 	"runtime"
 	"time"
