@@ -1,12 +1,8 @@
-FROM golang:1.21 as builder
+FROM golang:1.21
 
 WORKDIR /app
 COPY . .
 
 RUN go build
 
-FROM alpine:3.12 as runner
-WORKDIR /app
-COPY --from=builder /app/minecraft-server .
-
-CMD ["./minecraft-server"]
+ENTRYPOINT ["/app/minecraft-discord-bot"]

@@ -1,4 +1,4 @@
-module djpiper28/minecraft-server
+module djpiper28/minecraft-discord-bot
 
 go 1.19
 
