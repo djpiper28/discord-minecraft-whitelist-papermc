@@ -6,6 +6,7 @@ import (
 	"github.com/Goscord/goscord/discord"
 	"github.com/Goscord/goscord/discord/embed"
 	"github.com/Goscord/goscord/gateway"
+	"github.com/google/uuid"
 	"github.com/jackc/pgtype"
 	"gorm.io/gorm"
 	"log"
@@ -36,13 +37,15 @@ type DiscordUser struct {
 }
 
 type DiscordMinecraftUser struct {
-	DiscordUserID string `gorm:"primaryKey"`
-	Verified      bool
-	MinecraftUser string `gorm:"primaryKey"`
+	DiscordUserID   string    `gorm:"foriegnKey:DiscordUser.DiscordUserID,index,unique,composite:discord_minecraft_user"`
+	MinecraftUserID uuid.UUID `gorm:"foreignKey:MinecraftUser.Id,index,unique,composite:discord_minecraft_user"`
+	Verified        bool
+	Banned          bool
 }
 
 type MinecraftUser struct {
-	Username           string `gorm:"primaryKey"`
+	Id                 uuid.UUID `gorm:"primaryKey"`
+	Username           string
 	LastLoginTime      time.Time
 	LastX              float32
 	LastY              float32
@@ -51,7 +54,6 @@ type MinecraftUser struct {
 	LastChunkImage     []byte
 	LastSkinImage      []byte
 	VerificationNumber int64
-	Banned             bool
 }
 
 func reportMigrateError(err error) {

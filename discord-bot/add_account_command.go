@@ -152,7 +152,7 @@ If this is in fault please contact <@&%s>`, gs.AdminRole))
 		// Add discord minecraft user
 		discordMinecraftUser := DiscordMinecraftUser{
 			DiscordUserID: ctx.interaction.Member.User.Id,
-			MinecraftUser: accountName,
+			MinecraftUserID: accountName,
 			Verified:      false,
 		}
 		mdl = tx.Model(&discordMinecraftUser)
