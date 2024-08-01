@@ -7,7 +7,8 @@ Env vars:
 
 | Env Var | Description |
 |---|---|
-| BOT_TOKEN | Discord bot token, go to https://discord.com/developers/applications |
+| DISCORD_TOKEN | Discord bot token, go to https://discord.com/developers/applications |
+| DISCORD_GUILD_ID | Discord guild id, go to https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID- |
 | DATABASE_URL | Gorm.io database url, go to https://gorm.io/docs/connecting_to_the_database.html |
 
 Health check server is on `:8080`

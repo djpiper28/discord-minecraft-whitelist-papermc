@@ -4,6 +4,7 @@ WORKDIR /app
 COPY . .
 
 ENV DISCORD_TOKEN=change_me
+ENV DISCORD_GUILD_ID=change_me
 ENV DATABASE_RUl=change_me
 RUN go build
 

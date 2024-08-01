@@ -3,14 +3,16 @@ package main
 import (
 	"errors"
 	"fmt"
+	"log"
+	"os"
+	"time"
+
 	"github.com/Goscord/goscord/discord"
 	"github.com/Goscord/goscord/discord/embed"
 	"github.com/Goscord/goscord/gateway"
 	"github.com/google/uuid"
 	"github.com/jackc/pgtype"
 	"gorm.io/gorm"
-	"log"
-	"time"
 )
 
 // Bot database model - a "singleton" for the server
@@ -150,7 +152,7 @@ func CheckGuild(ctx *Context) error {
 	guildid := ctx.interaction.GuildId
 	if guildid != COMPSOC_GUILD_ID {
 		SendWrongGuildError(ctx)
-		log.Printf("Guild %s is not the CompSoc guild (%s).", guildid, COMPSOC_GUILD_ID)
+		log.Printf("Guild %s is not the guild (%s).", guildid, os.Getenv("DISCORD_GUILD_ID"))
 		return errors.New("Wrong guild.")
 	}
 	return nil
