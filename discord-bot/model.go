@@ -140,7 +140,7 @@ func SendBannedError(ctx *Context) {
 }
 
 func SendWrongGuildError(ctx *Context) {
-	SendError("You cannot use this bot from outside of the CompSoc server.", ctx)
+	SendError("You cannot use this bot from outside of the owner's server.", ctx)
 }
 
 func SendInternalError(err error, ctx *Context) {
@@ -149,10 +149,11 @@ func SendInternalError(err error, ctx *Context) {
 }
 
 func CheckGuild(ctx *Context) error {
+  requiredGuild := os.Getenv("DISCORD_GUILD_ID") 
 	guildid := ctx.interaction.GuildId
-	if guildid != COMPSOC_GUILD_ID {
+	if guildid != requiredGuild {
 		SendWrongGuildError(ctx)
-		log.Printf("Guild %s is not the guild (%s).", guildid, os.Getenv("DISCORD_GUILD_ID"))
+		log.Printf("Guild %s is not the guild (%s).", guildid, requiredGuild)
 		return errors.New("Wrong guild.")
 	}
 	return nil

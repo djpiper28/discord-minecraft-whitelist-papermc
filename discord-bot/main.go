@@ -14,8 +14,6 @@ import (
 	"time"
 )
 
-const COMPSOC_GUILD_ID = "500612695570120704"
-
 var db *gorm.DB
 
 func main() {
@@ -25,7 +23,7 @@ func main() {
 
 	err := godotenv.Load()
 	if err != nil {
-		log.Printf("Cannot load a .env file, using normal env vars instead", err)
+		log.Print("Cannot load a .env file, using normal env vars instead", err)
 	}
 
 	// Setup database
