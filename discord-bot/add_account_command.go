@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"math/rand"
+	"os"
 
 	"github.com/Goscord/goscord/discord"
 	"github.com/Goscord/goscord/discord/embed"
@@ -97,7 +98,7 @@ If this is in fault please contact <@&%s>`, gs.AdminRole))
 			return err
 		}
 
-    // Add user
+		// Add user
 		mcUser, err := GetMinecraftUser(accountName)
 		if err != nil {
 			return err
@@ -181,9 +182,10 @@ If this is in fault please contact <@&%s>`, gs.AdminRole))
 	message := fmt.Sprintf(`**User:** <@%s>
 **Minecraft User:** %s
 
-Please join **mc.computingsociety.co.uk** with this user to verify the account and, **use /mcverify with the code that you get.**`,
+Please join **%s** with this user to verify the account and, **use /mcverify with the code that you get.**`,
 		ctx.interaction.Member.User.Id,
-		accountName)
+		accountName,
+		os.Getenv("MINECRAFT_IP"))
 
 	e.SetTitle("Added A New Minecraft User To The Whitelist")
 	e.SetDescription(message)
