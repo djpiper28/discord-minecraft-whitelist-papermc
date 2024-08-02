@@ -120,9 +120,7 @@ func (c *VerifyCommand) Execute(ctx *Context) bool {
 
 		// Mark the user as verified
 		err = minecraftUserModel.Where("id = ?", userLookup.Id).
-			Updates(map[string]interface{}{
-				"verified": true,
-			}).Error
+			Update("verified", true).Error
 		if err != nil {
 			return err
 		}
