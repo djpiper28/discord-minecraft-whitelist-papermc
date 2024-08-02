@@ -24,8 +24,8 @@ func (c *PlayerInfoCommand) Category() string {
 func (c *PlayerInfoCommand) Options() []*discord.ApplicationCommandOption {
 	return []*discord.ApplicationCommandOption{
 		{
-			Type:        discord.ApplicationCommandOptionUser,
-			Name:        "discord",
+			Type:        discord.ApplicationCommandOptionString,
+			Name:        "user",
 			Description: "The Discord user to get information about",
 			Required:    true,
 		},
