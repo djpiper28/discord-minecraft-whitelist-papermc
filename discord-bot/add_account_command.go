@@ -105,7 +105,7 @@ If this is in fault please contact <@&%s>`, gs.AdminRole))
 		}
 
 		var count int64
-		err = mdl.Where("verified = true AND minecraft_user_id = ?", mcUser.Id).Count(&count).Error
+		err = mdl.Where("verified = true AND id = ?", mcUser.Id).Count(&count).Error
 		if err != nil {
 			return err
 		}
