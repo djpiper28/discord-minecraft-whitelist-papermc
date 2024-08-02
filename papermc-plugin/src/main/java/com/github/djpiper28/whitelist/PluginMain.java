@@ -76,7 +76,7 @@ public class PluginMain extends JavaPlugin implements Listener {
 
             // Check for bans
             if (user.isBanned()) {
-                event.disallow(Result.KICK_BANNED, "Your account has been banned via the Discord bot. Please contract committee if this is wrong.");
+                event.disallow(Result.KICK_BANNED, "Your account has been banned via the Discord bot.");
                 getLogger().info("User " + event.getName() + " has been banned but has tried to join.");
                 return;
             } else if (user.getVerified() == 0) {https://discord.com/channels/500612695570120704/1045311826528849960
@@ -93,7 +93,7 @@ public class PluginMain extends JavaPlugin implements Listener {
             return;
         } catch (UserNotFoundException e) {
             e.printStackTrace();
-            event.disallow(Result.KICK_OTHER, "You are not in the Compsoc Minecraft server's whitelist. Please use '/mcadd " + event.getName() + "'");
+            event.disallow(Result.KICK_OTHER, "You are not in the Minecraft server's whitelist. Please use '/mcadd " + event.getName() + "'");
             return;
         }
 

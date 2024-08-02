@@ -140,7 +140,7 @@ public class Database {
 
                 getBannedStatus.setString(1, id);
                 ResultSet bannedStatus = getBannedStatus.executeQuery();
-                if (!res.next()) {
+                if (!bannedStatus.next()) {
                     throw new UserNotFoundException();
                 }
 
