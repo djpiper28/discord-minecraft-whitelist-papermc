@@ -14,7 +14,7 @@ func (c *PlayerInfoCommand) Name() string {
 }
 
 func (c *PlayerInfoCommand) Description() string {
-	return "Get information about a player via their Discord account."
+	return "Get information about a player via their Discord account"
 }
 
 func (c *PlayerInfoCommand) Category() string {
