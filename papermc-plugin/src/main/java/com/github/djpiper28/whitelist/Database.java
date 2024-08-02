@@ -120,8 +120,12 @@ public class Database {
                         "FROM minecraft_users WHERE verified = true AND id = ?;");
                 PreparedStatement getMinecraftUserPs = conn.prepareStatement("SELECT * FROM minecraft_users WHERE id = ?;");
                 PreparedStatement updateMinecraftUsernameCache = conn.prepareStatement("UPDATE minecraft_users SET username = ? WHERE id = ?;");
+                PreparedStatement getBannedStatus = conn.prepareStatement("SELECT discord_users.banned " +
+                        "FROM discord_users " +
+                        "LEFT JOIN discord_minecraft_users ON discord_users.discord_user_id = discord_minecraft_users.discord_user_id " +
+                        "WHERE discord_minecraft_users.minecraft_user_id = ?;");
 
-                getVerficationCountForUserPs.setString(1, id);
+                        getVerficationCountForUserPs.setString(1, id);
                 ResultSet res = getVerficationCountForUserPs.executeQuery();
                 if (!res.next()) {
                     throw new UserNotFoundException();
@@ -136,7 +140,7 @@ public class Database {
                 final MinecraftUser user = new MinecraftUser(res.getString("id"),
                         res.getString("username"),
                         res.getInt("verification_number"),
-                        res.getBoolean("banned"),
+                        banned
                         verified);
 
                 if (!user.getUsername().equals(username)) {
