@@ -1,15 +1,17 @@
 # minecraft-server
+
 mc server bot and, plugin to allow for a compsoc whitelist
 
 ## Discord Bot
 
 Env vars:
 
-| Env Var | Description |
-|---|---|
-| DISCORD_TOKEN | Discord bot token, go to https://discord.com/developers/applications |
+| Env Var          | Description                                                                                                                 |
+| ---------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| DISCORD_TOKEN    | Discord bot token, go to https://discord.com/developers/applications                                                        |
 | DISCORD_GUILD_ID | Discord guild id, go to https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID- |
-| DATABASE_URL | Gorm.io database url, go to https://gorm.io/docs/connecting_to_the_database.html |
+| DATABASE_URL     | Gorm.io database url, go to https://gorm.io/docs/connecting_to_the_database.html                                            |
+| MINECRAFT_IP     | Public IP for your server i.e: 1.2.3.4:25565                                                                                |
 
 Health check server is on `:8080`
 
@@ -26,6 +28,7 @@ Health check server is on `:8080`
 The user joins the Miencraft Server, they will be kicked with a message showing a code.
 
 Example Message:
+
 ```
 You need to verify your account, use /mcverify 123456
 ```
@@ -54,10 +57,11 @@ When a user leaves the discord server, they will be kicked from the Minecraft se
 ## Logging TODO
 
 Users will have the following data logged:
- - Last join IP
- - Last coordinates (x, y, z)
- - Last skin image
- - Last chunk (top down image)
+
+- Last join IP
+- Last coordinates (x, y, z)
+- Last skin image
+- Last chunk (top down image)
 
 ## All "Administrators" are given OP TODO
 

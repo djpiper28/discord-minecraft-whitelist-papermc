@@ -82,7 +82,7 @@ func main() {
 		}
 
 		log.Print("Setting activity")
-		err = client.SetActivity(&discord.Activity{Name: "mc.computingsociety.co.uk", Type: discord.ActivityListening})
+		err = client.SetActivity(&discord.Activity{Name: os.Getenv("MINECRAFT_IP"), Type: discord.ActivityListening})
 		if err != nil {
 			log.Print(err)
 		}
