@@ -8,10 +8,10 @@ plugins {
   id("com.github.johnrengelman.shadow") version "7.0.0"
 }
 
-var pluginName = "rhulcompsoc-whitelist"
+var pluginName = "discord-bot-whitelist"
 group = "com.github.rhulcompsoc"
 version = "1.0.0-SNAPSHOT"
-description = "Compsoc Whitelist Plugin"
+description = "Whitelist Plugin"
 var pluginMain = "com.github.hulcompsoc.whitelist.PluginMain"
 var pluginApiVersion = "1.18"
 
