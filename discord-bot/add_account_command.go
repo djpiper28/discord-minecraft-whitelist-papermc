@@ -3,11 +3,12 @@ package main
 import (
 	"errors"
 	"fmt"
+	"log"
+	"math/rand"
+
 	"github.com/Goscord/goscord/discord"
 	"github.com/Goscord/goscord/discord/embed"
 	"gorm.io/gorm"
-	"log"
-	"math/rand"
 )
 
 const MAX_VERIFCATION_NUMBER = 999999
@@ -78,7 +79,8 @@ func (c *AddAccountCommand) Execute(ctx *Context) bool {
 			return err
 		}
 
-		err = mdl.FirstOrCreate(&discordUser, ctx.interaction.Member.User.Id).Error
+		err = mdl.Where("discord_user_id = ?", ctx.interaction.Member.User.Id).
+			FirstOrCreate(&discordUser, ctx.interaction.Member.User.Id).Error
 		if err != nil {
 			return err
 		}
@@ -95,8 +97,14 @@ If this is in fault please contact <@&%s>`, gs.AdminRole))
 			return err
 		}
 
+    // Add user
+		mcUser, err := GetMinecraftUser(accountName)
+		if err != nil {
+			return err
+		}
+
 		var count int64
-		err = mdl.Where("discord_user_id = ? AND minecraft_user = ?", ctx.interaction.Member.User.Id, accountName).Count(&count).Error
+		err = mdl.Where("discord_user_id = ? AND minecraft_user_id = ?", ctx.interaction.Member.User.Id, mcUser.Id).Count(&count).Error
 		if err != nil {
 			return err
 		}
@@ -119,11 +127,6 @@ If this is in fault please contact <@&%s>`, gs.AdminRole))
 
 		if count >= gs.MaxAccountsPerUser {
 			return errors.New("Maximum user count has been reached for your account.")
-		}
-
-		mcUser, err := GetMinecraftUser(accountName)
-		if err != nil {
-			return err
 		}
 
 		// Create a new unverified user
