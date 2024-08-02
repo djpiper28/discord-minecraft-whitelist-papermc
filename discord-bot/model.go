@@ -39,13 +39,14 @@ type DiscordUser struct {
 }
 
 type DiscordMinecraftUser struct {
-	DiscordUserID   string    `gorm:"foriegnKey:DiscordUser.DiscordUserID,index,unique,composite:discord_minecraft_user"`
-	MinecraftUserID uuid.UUID `gorm:"foreignKey:MinecraftUser.Id,index,unique,composite:discord_minecraft_user"`
+	DiscordUserID   string    `gorm:"foriegnKey:discord_user.discord_user_id,index,unique,composite:discord_minecraft_user"`
+	MinecraftUserID uuid.UUID `gorm:"foreignKey:minecraft_user.id,index,unique,composite:discord_minecraft_user"`
 	Verified        bool
 }
 
 type MinecraftUser struct {
 	Id                 uuid.UUID `gorm:"primaryKey"`
+  // Cached username, updated every time the user logs in to the server
 	Username           string
 	LastLoginTime      time.Time
 	LastX              float32
@@ -59,15 +60,15 @@ type MinecraftUser struct {
 
 func reportMigrateError(err error) {
 	if err != nil {
-		log.Print(err)
+		log.Fatal(err)
 	}
 }
 
 func AutoMigrateModel() {
-	reportMigrateError(db.AutoMigrate(&MinecraftUser{}))
-	reportMigrateError(db.AutoMigrate(&DiscordMinecraftUser{}))
-	reportMigrateError(db.AutoMigrate(&DiscordUser{}))
-	reportMigrateError(db.AutoMigrate(&GuildSettings{}))
+	reportMigrateError(db.AutoMigrate(&MinecraftUser{},
+		&DiscordMinecraftUser{},
+		&DiscordUser{},
+		&GuildSettings{}))
 }
 
 // Helper function to set IP addresses, probably won't be used lmao
@@ -149,7 +150,7 @@ func SendInternalError(err error, ctx *Context) {
 }
 
 func CheckGuild(ctx *Context) error {
-  requiredGuild := os.Getenv("DISCORD_GUILD_ID") 
+	requiredGuild := os.Getenv("DISCORD_GUILD_ID")
 	guildid := ctx.interaction.GuildId
 	if guildid != requiredGuild {
 		SendWrongGuildError(ctx)
