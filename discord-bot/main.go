@@ -53,7 +53,7 @@ func main() {
 		new(SetupCommand),
 		new(AddAccountCommand),
 		new(VerifyCommand),
-    new(PlayerInfoCommand),
+		new(PlayerInfoCommand),
 	}
 
 	// Create client instance
@@ -122,7 +122,7 @@ func main() {
 	// Keep bot running
 	log.Print("Bot started")
 
-  go HealthCheckServer()
+	go HealthCheckServer()
 
 	//go UpdateThread()
 	select {}

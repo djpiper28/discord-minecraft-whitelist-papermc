@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/Goscord/goscord/discord"
 	"github.com/Goscord/goscord/discord/embed"
-	"gorm.io/gorm"
 	"log"
 )
 
@@ -30,7 +29,7 @@ func (c *PlayerInfoCommand) Options() []*discord.ApplicationCommandOption {
 			Description: "The Discord user to get information about",
 			Required:    true,
 		},
-  }
+	}
 }
 
 func (c *PlayerInfoCommand) Execute(ctx *Context) bool {
@@ -38,37 +37,37 @@ func (c *PlayerInfoCommand) Execute(ctx *Context) bool {
 		return false
 	}
 
-  discordId := ctx.interaction.Data.Options[0].Value.(string)
+	discordId := ctx.interaction.Data.Options[0].Value.(string)
 
-  var discordUser DiscordUser
-  err := db.Model(&discordUser).
-    Where("discord_id = ?", discordId).First(&discordUser).Error
-  if err != nil {
-    SendInternalError(err, ctx)
-    return false
-  }
+	var discordUser DiscordUser
+	err := db.Model(&discordUser).
+		Where("discord_id = ?", discordId).First(&discordUser).Error
+	if err != nil {
+		SendInternalError(err, ctx)
+		return false
+	}
 
-  var minecraftUsers []MinecraftUser
-  err = db.Model(&minecraftUsers).
-    Where("discord_id = ?", discordId).Find(&minecraftUsers).Error
-  if err != nil {
-    SendInternalError(err, ctx)
-    return false
-  }
+	var minecraftUsers []MinecraftUser
+	err = db.Model(&minecraftUsers).
+		Where("discord_id = ?", discordId).Find(&minecraftUsers).Error
+	if err != nil {
+		SendInternalError(err, ctx)
+		return false
+	}
 
 	e := embed.NewEmbedBuilder()
-  message := fmt.Sprintf("Banned: %t\nAdmin: %t\n", 
-    discordUser.Banned,
-    discordUser.HasAdminRole)
+	message := fmt.Sprintf("Banned: %t\nAdmin: %t\n",
+		discordUser.Banned,
+		discordUser.HasAdminRole)
 
-  for _, user := range minecraftUsers {
-    verificationStatus := "✅"
+	for _, user := range minecraftUsers {
+		verificationStatus := "✅"
 
-    if !user.Verified {
-      verificationStatus = "❌"
-    }
-    message += fmt.Sprintf("%s: %s\n",verificationStatus, user.Username)
-  }
+		if !user.Verified {
+			verificationStatus = "❌"
+		}
+		message += fmt.Sprintf("%s: %s\n", verificationStatus, user.Username)
+	}
 
 	e.SetTitle(fmt.Sprintf("Information about %s", discordId))
 	e.SetDescription(message)
@@ -79,7 +78,7 @@ func (c *PlayerInfoCommand) Execute(ctx *Context) bool {
 		ctx.interaction.Token,
 		&discord.InteractionCallbackMessage{Embeds: []*embed.Embed{e.Embed()},
 			Flags: discord.MessageFlagUrgent})
-  log.Printf("Data lookup for <@%s> complete", discordId)
+	log.Printf("Data lookup for <@%s> complete", discordId)
 
-  return true
+	return true
 }
