@@ -116,8 +116,6 @@ public class Database {
         this.runOnDatabase((conn -> {
             try {
                 conn.setAutoCommit(false);
-                PreparedStatement getVerficationCountForUserPs = conn.prepareStatement("SELECT count(id) " +
-                        "FROM minecraft_users WHERE verified = true AND id = ?;");
                 PreparedStatement getMinecraftUserPs = conn.prepareStatement("SELECT * FROM minecraft_users WHERE id = ?;");
                 PreparedStatement updateMinecraftUsernameCache = conn.prepareStatement("UPDATE minecraft_users SET username = ? WHERE id = ?;");
                 PreparedStatement getBannedStatus = conn.prepareStatement("SELECT discord_users.banned " +
@@ -125,15 +123,8 @@ public class Database {
                         "LEFT JOIN discord_minecraft_users ON discord_users.discord_user_id = discord_minecraft_users.discord_user_id " +
                         "WHERE discord_minecraft_users.minecraft_user_id = ?;");
 
-                        getVerficationCountForUserPs.setString(1, id);
-                ResultSet res = getVerficationCountForUserPs.executeQuery();
-                if (!res.next()) {
-                    throw new UserNotFoundException();
-                }
-                final int verified = res.getInt(1);
-
                 getMinecraftUserPs.setString(1, id);
-                res = getMinecraftUserPs.executeQuery();
+                ResultSet res = getMinecraftUserPs.executeQuery();
                 if (!res.next()) {
                     throw new UserNotFoundException();
                 }
@@ -148,7 +139,7 @@ public class Database {
                         res.getString("username"),
                         res.getInt("verification_number"),
                         bannedStatus.getBoolean(1),
-                        verified);
+                        res.getBoolean("verified"));
 
                 if (!user.getUsername().equals(username)) {
                     System.out.println("Updating the username in the cache");

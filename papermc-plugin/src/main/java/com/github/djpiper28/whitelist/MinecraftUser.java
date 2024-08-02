@@ -5,9 +5,9 @@ public class MinecraftUser {
     private final String username;
     private final int verificationNumber;
     private final boolean banned;
-    private final int verified;
+    private final boolean verified;
 
-    public MinecraftUser(final String id, final String username, final int verificationNumber, final boolean banned, final int verified) {
+    public MinecraftUser(final String id, final String username, final int verificationNumber, final boolean banned, final boolean verified) {
         this.id = id;
         this.username = username;
         this.verificationNumber = verificationNumber;
@@ -31,7 +31,7 @@ public class MinecraftUser {
         return banned;
     }
 
-    public int getVerified() {
+    public boolean getVerified() {
         return verified;
     }
 }
