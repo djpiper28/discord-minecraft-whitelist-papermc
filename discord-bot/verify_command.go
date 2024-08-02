@@ -54,13 +54,13 @@ func (c *VerifyCommand) Execute(ctx *Context) bool {
 	err := db.Transaction(func(tx *gorm.DB) error {
 		// Get guild settings
 		var gs GuildSettings
-		mdl := tx.Model(&gs)
-		err := mdl.Error
+		minecraftUserModel := tx.Model(&gs)
+		err := minecraftUserModel.Error
 		if err != nil {
 			return err
 		}
 
-		err = mdl.First(&gs, guildid).Error
+		err = minecraftUserModel.First(&gs, guildid).Error
 		if err != nil {
 			return err
 		}
@@ -76,43 +76,40 @@ func (c *VerifyCommand) Execute(ctx *Context) bool {
 			Banned:        false,
 			DiscordUserID: ctx.interaction.Member.User.Id,
 		}
-		mdl = tx.Model(&discordUser)
-		err = mdl.Error
+		minecraftUserModel = tx.Model(&discordUser)
+		err = minecraftUserModel.Error
+		if err != nil {
+			return err
+		}
+
+		userLookup, err := GetMinecraftUser(accountName)
 		if err != nil {
 			return err
 		}
 
 		// Get the discord minecraft user
 		dcmcUser := DiscordMinecraftUser{}
-		dcmcmdl := tx.Model(&dcmcUser)
-		err = dcmcmdl.Error
+		discordUserModel := tx.Model(&dcmcUser)
+		err = discordUserModel.Error
 		if err != nil {
 			return err
 		}
 
-    userLookup, err := GetMinecraftUser(accountName)
-    if err != nil {
-      return err
-    }
-
-		err = dcmcmdl.First(&dcmcUser, "discord_user_id = ? AND minecraft_user_id = ?", ctx.interaction.Member.User.Id, userLookup.Id).Error
+		err = discordUserModel.First(&dcmcUser, "discord_user_id = ? AND minecraft_user_id = ?", ctx.interaction.Member.User.Id, userLookup.Id).Error
 		if err != nil {
 			return err
-		}
-
-		if dcmcUser.Verified == true {
-			return errors.New("This user is already verified")
 		}
 
 		// Get the minecraft user with the accountName
 		mcUser := MinecraftUser{}
-		mdl = tx.Model(&mcUser)
-		err = mdl.Error
+		minecraftUserModel = tx.Model(&mcUser)
+		err = minecraftUserModel.Error
 		if err != nil {
 			return err
 		}
 
-		err = mdl.Select("username", "verification_number").First(&mcUser, "username = ?", accountName).Error
+		err = minecraftUserModel.Select("username", "verification_number").
+			First(&mcUser, "id = ?", userLookup.Id).Error
 		if err != nil {
 			return err
 		}
@@ -122,9 +119,10 @@ func (c *VerifyCommand) Execute(ctx *Context) bool {
 		}
 
 		// Mark the user as verified
-		err = dcmcmdl.Updates(map[string]interface{}{
-			"verified": true,
-		}).Error
+		err = minecraftUserModel.Where("id = ?", userLookup.Id).
+			Updates(map[string]interface{}{
+				"verified": true,
+			}).Error
 		if err != nil {
 			return err
 		}

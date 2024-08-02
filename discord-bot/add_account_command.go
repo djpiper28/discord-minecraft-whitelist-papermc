@@ -92,7 +92,7 @@ If this is in fault please contact <@&%s>`, gs.AdminRole))
 		}
 
 		// Check that nobody else has verified this account
-		mdl = tx.Model(&DiscordMinecraftUser{})
+		mdl = tx.Model(&MinecraftUser{})
 		err = mdl.Error
 		if err != nil {
 			return err
@@ -105,7 +105,7 @@ If this is in fault please contact <@&%s>`, gs.AdminRole))
 		}
 
 		var count int64
-		err = mdl.Where("discord_user_id = ? AND minecraft_user_id = ?", ctx.interaction.Member.User.Id, mcUser.Id).Count(&count).Error
+		err = mdl.Where("verified = true AND minecraft_user_id = ?", mcUser.Id).Count(&count).Error
 		if err != nil {
 			return err
 		}
@@ -142,7 +142,7 @@ If this is in fault please contact <@&%s>`, gs.AdminRole))
 			return err
 		}
 
-		err = mdl.FirstOrCreate(&minecraftUser, "Username = ?", accountName).Error
+		err = mdl.FirstOrCreate(&minecraftUser, "Id = ?", mcUser.Id).Error
 		if err != nil {
 			return err
 		}
@@ -154,7 +154,6 @@ If this is in fault please contact <@&%s>`, gs.AdminRole))
 		discordMinecraftUser := DiscordMinecraftUser{
 			DiscordUserID:   ctx.interaction.Member.User.Id,
 			MinecraftUserID: mcUser.Id,
-			Verified:        false,
 		}
 		mdl = tx.Model(&discordMinecraftUser)
 		err = mdl.Error
@@ -167,12 +166,9 @@ If this is in fault please contact <@&%s>`, gs.AdminRole))
 			return err
 		}
 
-		if discordMinecraftUser.Verified {
-			return errors.New("You have already got a verified user by this name.")
-		}
-
 		return nil
 	})
+
 	if err != nil {
 		SendInternalError(err, ctx)
 		return false
