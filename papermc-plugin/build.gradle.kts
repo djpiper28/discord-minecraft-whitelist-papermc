@@ -9,10 +9,10 @@ plugins {
 }
 
 var pluginName = "discord-bot-whitelist"
-group = "com.github.rhulcompsoc"
+group = "com.github.djpiper28"
 version = "1.0.0-SNAPSHOT"
 description = "Whitelist Plugin"
-var pluginMain = "com.github.hulcompsoc.whitelist.PluginMain"
+var pluginMain = "com.github.djpiper28.whitelist.PluginMain"
 var pluginApiVersion = "1.18"
 
 java {
