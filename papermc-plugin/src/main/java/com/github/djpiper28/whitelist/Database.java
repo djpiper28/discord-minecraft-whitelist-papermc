@@ -137,10 +137,14 @@ public class Database {
                 if (!res.next()) {
                     throw new UserNotFoundException();
                 }
+
+                getBannedStatus.setString(1, id);
+                ResultSet bannedStatus = getBannedStatus.executeQuery();
+
                 final MinecraftUser user = new MinecraftUser(res.getString("id"),
                         res.getString("username"),
                         res.getInt("verification_number"),
-                        banned
+                        bannedStatus.getBoolean(1),
                         verified);
 
                 if (!user.getUsername().equals(username)) {
