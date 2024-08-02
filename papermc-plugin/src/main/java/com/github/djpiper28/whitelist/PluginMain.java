@@ -79,7 +79,7 @@ public class PluginMain extends JavaPlugin implements Listener {
                 event.disallow(Result.KICK_BANNED, "Your account has been banned via the Discord bot.");
                 getLogger().info("User " + event.getName() + " has been banned but has tried to join.");
                 return;
-            } else if (user.getVerified()) {
+            } else if (!user.getVerified()) {
                 // Check that the user has been verified at least once
                 event.disallow(Result.KICK_OTHER, "This Minecraft account has not been verified yet, please use '/mcverify "
                         + event.getName() + " "
