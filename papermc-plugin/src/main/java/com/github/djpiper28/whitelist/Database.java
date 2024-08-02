@@ -116,8 +116,8 @@ public class Database {
         this.runOnDatabase((conn -> {
             try {
                 conn.setAutoCommit(false);
-                PreparedStatement getVerficationCountForUserPs = conn.prepareStatement("SELECT count(discord_user_id) " +
-                        "FROM discord_minecraft_users WHERE verified = true AND minecraft_user_id = ?;");
+                PreparedStatement getVerficationCountForUserPs = conn.prepareStatement("SELECT count(id) " +
+                        "FROM minecraft_users WHERE verified = true AND id = ?;");
                 PreparedStatement getMinecraftUserPs = conn.prepareStatement("SELECT * FROM minecraft_users WHERE id = ?;");
                 PreparedStatement updateMinecraftUsernameCache = conn.prepareStatement("UPDATE minecraft_users SET username = ? WHERE id = ?;");
 
