@@ -1,4 +1,4 @@
-package com.github.hulcompsoc.whitelist;
+package com.github.djpiper28.whitelist;
 
 import java.sql.Connection;
 

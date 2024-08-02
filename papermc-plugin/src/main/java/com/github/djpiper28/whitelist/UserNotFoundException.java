@@ -1,4 +1,4 @@
-package com.github.hulcompsoc.whitelist;
+package com.github.djpiper28.whitelist;
 
 /**
  * The user does not exist in our records - this is so sad, Alexa play despacito.

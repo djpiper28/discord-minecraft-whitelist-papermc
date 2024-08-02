@@ -1,4 +1,4 @@
-package com.github.hulcompsoc.whitelist;
+package com.github.djpiper28.whitelist;
 
 import io.github.cdimascio.dotenv.Dotenv;
 import org.bukkit.event.EventHandler;
@@ -72,7 +72,7 @@ public class PluginMain extends JavaPlugin implements Listener {
     @EventHandler
     public void onPlayerLogin(AsyncPlayerPreLoginEvent event) {
         try {
-            MinecraftUser user = this.conn.getUser(event.getName());
+            MinecraftUser user = this.conn.getUser(event.getName(), event.getPlayerProfile().getId().toString());
 
             // Check for bans
             if (user.isBanned()) {
@@ -107,7 +107,7 @@ public class PluginMain extends JavaPlugin implements Listener {
                     event.getPlayer().getLocation().getX(),
                     event.getPlayer().getLocation().getY(),
                     event.getPlayer().getLocation().getZ(),
-                    event.getPlayer().getName());
+                    event.getPlayer().getUniqueId().toString());
         } catch (SQLException e) {
             e.printStackTrace();
             getLogger().warning("Cannot update player status");

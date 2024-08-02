@@ -1,4 +1,4 @@
-package com.github.hulcompsoc.whitelist;
+package com.github.djpiper28.whitelist;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.logging.log4j.LogManager;
@@ -78,18 +78,18 @@ public class Database {
         return ex != null;
     }
 
-    public void updateMinecraftUserLastAccessDetails(InetAddress ipaddr, double x, double y, double z, String username) throws SQLException {
+    public void updateMinecraftUserLastAccessDetails(InetAddress ipaddr, double x, double y, double z, String id) throws SQLException {
         AtomicReference<SQLException> ex = new AtomicReference<>();
         this.runOnDatabase((conn) -> {
             try {
                 PreparedStatement updateStatement = conn.prepareStatement("UPDATE minecraft_users " +
                         "SET last_ip_address = ?, last_x, = ? last_y = ?, last_z = ? " +
-                        "WHERE username = ?;");
+                        "WHERE id = ?;");
                 updateStatement.setString(1, ipaddr.getHostAddress());
                 updateStatement.setDouble(2, x);
                 updateStatement.setDouble(3, y);
                 updateStatement.setDouble(4, z);
-                updateStatement.setString(5, username);
+                updateStatement.setString(5, id);
                 updateStatement.executeUpdate();
             } catch (SQLException e) {
                 ex.set(e);
@@ -108,7 +108,7 @@ public class Database {
      * @return the user object
      * @throws SQLException thrown if any SQL errors occur when trying to get the user
      */
-    public MinecraftUser getUser(String username) throws SQLException, UserNotFoundException {
+    public MinecraftUser getUser(String username, String id) throws SQLException, UserNotFoundException {
         AtomicReference<MinecraftUser> ret = new AtomicReference<>(null);
         AtomicReference<SQLException> ex = new AtomicReference<>(null);
         AtomicReference<UserNotFoundException> ex2 = new AtomicReference<>(null);
@@ -117,25 +117,35 @@ public class Database {
             try {
                 conn.setAutoCommit(false);
                 PreparedStatement getVerficationCountForUserPs = conn.prepareStatement("SELECT count(discord_user_id) " +
-                        "FROM discord_minecraft_users WHERE verified = true AND minecraft_user = ?;");
-                PreparedStatement getMinecraftUserPs = conn.prepareStatement("SELECT * FROM minecraft_users WHERE username = ?;");
+                        "FROM discord_minecraft_users WHERE verified = true AND minecraft_user_id = ?;");
+                PreparedStatement getMinecraftUserPs = conn.prepareStatement("SELECT * FROM minecraft_users WHERE id = ?;");
+                PreparedStatement updateMinecraftUsernameCache = conn.prepareStatement("UPDATE minecraft_users SET username = ? WHERE id = ?;");
 
-                getVerficationCountForUserPs.setString(1, username);
+                getVerficationCountForUserPs.setString(1, id);
                 ResultSet res = getVerficationCountForUserPs.executeQuery();
                 if (!res.next()) {
                     throw new UserNotFoundException();
                 }
                 final int verified = res.getInt(1);
 
-                getMinecraftUserPs.setString(1, username);
+                getMinecraftUserPs.setString(1, id);
                 res = getMinecraftUserPs.executeQuery();
                 if (!res.next()) {
                     throw new UserNotFoundException();
                 }
-                final MinecraftUser user = new MinecraftUser(res.getString("username"),
+                final MinecraftUser user = new MinecraftUser(res.getString("id"),
+                        res.getString("username"),
                         res.getInt("verification_number"),
                         res.getBoolean("banned"),
                         verified);
+
+                if (!user.getUsername().equals(username)) {
+                    System.out.println("Updating the username in the cache");
+
+                    updateMinecraftUsernameCache.setString(1, username);
+                    updateMinecraftUsernameCache.setString(2, id);
+                    updateMinecraftUsernameCache.executeUpdate();
+                }
 
                 ret.set(user);
                 conn.commit();
