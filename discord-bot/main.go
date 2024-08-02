@@ -53,6 +53,7 @@ func main() {
 		new(SetupCommand),
 		new(AddAccountCommand),
 		new(VerifyCommand),
+    new(PlayerInfoCommand),
 	}
 
 	// Create client instance
