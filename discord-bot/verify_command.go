@@ -119,6 +119,7 @@ func (c *VerifyCommand) Execute(ctx *Context) bool {
 		}
 
 		// Mark the user as verified
+		minecraftUserModel = tx.Model(&mcUser)
 		err = minecraftUserModel.Where("id = ?", userLookup.Id).
 			Update("verified", true).Error
 		if err != nil {
