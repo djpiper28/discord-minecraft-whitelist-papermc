@@ -10,7 +10,7 @@ import (
 type PlayerInfoCommand struct{}
 
 func (c *PlayerInfoCommand) Name() string {
-	return "mcplayerinfo"
+	return "mcplayer"
 }
 
 func (c *PlayerInfoCommand) Description() string {
