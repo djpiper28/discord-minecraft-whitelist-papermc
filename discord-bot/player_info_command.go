@@ -41,7 +41,7 @@ func (c *PlayerInfoCommand) Execute(ctx *Context) bool {
 
 	var discordUser DiscordUser
 	err := db.Model(&discordUser).
-		Where("discord_id = ?", discordId).First(&discordUser).Error
+		Where("discord_user_id = ?", discordId).First(&discordUser).Error
 	if err != nil {
 		SendInternalError(err, ctx)
 		return false
