@@ -21,7 +21,7 @@ func (c *AddAccountCommand) Name() string {
 }
 
 func (c *AddAccountCommand) Description() string {
-	return "Add an account to the Compsoc Minecraft server's whitelist"
+	return "Add an account to the Minecraft server's whitelist"
 }
 
 func (c *AddAccountCommand) Category() string {
