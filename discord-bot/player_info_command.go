@@ -49,16 +49,17 @@ func (c *PlayerInfoCommand) Execute(ctx *Context) bool {
 
 	var minecraftUsers []MinecraftUser
 	err = db.Model(&minecraftUsers).
-    InnerJoins("RIGHT JOIN discord_minecraft_users ON discord_minecraft_users.minecraft_user_id = minecraft_users.id").
+		InnerJoins("RIGHT JOIN discord_minecraft_users ON discord_minecraft_users.minecraft_user_id = minecraft_users.id").
 		Where("discord_minecraft_users.discord_user_id = ?", discordId).
-    Scan(&minecraftUsers).Error
+		Scan(&minecraftUsers).Error
 	if err != nil {
 		SendInternalError(err, ctx)
 		return false
 	}
 
 	e := embed.NewEmbedBuilder()
-	message := fmt.Sprintf("Banned: %t\nAdmin: %t\n",
+	message := fmt.Sprintf("<@%s>\nBanned: %t\nAdmin: %t\n",
+		discordId,
 		discordUser.Banned,
 		discordUser.HasAdminRole)
 
@@ -71,7 +72,7 @@ func (c *PlayerInfoCommand) Execute(ctx *Context) bool {
 		message += fmt.Sprintf("%s: %s\n", verificationStatus, user.Username)
 	}
 
-	e.SetTitle(fmt.Sprintf("Information about <@%s>", discordId))
+	e.SetTitle("Information About Player")
 	e.SetDescription(message)
 	ThemeEmbed(e, ctx)
 
