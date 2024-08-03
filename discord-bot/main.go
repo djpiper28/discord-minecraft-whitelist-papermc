@@ -65,17 +65,17 @@ func main() {
 	// Setup events
 	err = client.On("ready", func() {
 		log.Print("Clearing old slash commands")
-		// cmds, err := client.Application.GetCommands(client.Me().Id, "")
-		// if err != nil {
-		// 	log.Print(err)
-		// } else {
-		// 	for i := range cmds {
-		// 		err = client.Application.DeleteCommand(client.Me().Id, "", cmds[i].Id)
-		// 		if err != nil {
-		// 			log.Print(err)
-		// 		}
-		// 	}
-		// }
+		cmds, err := client.Application.GetCommands(client.Me().Id, "")
+		if err != nil {
+			log.Print(err)
+		} else {
+			for i := range cmds {
+				err = client.Application.DeleteCommand(client.Me().Id, "", cmds[i].Id)
+				if err != nil {
+					log.Print(err)
+				}
+			}
+		}
 
 		log.Print("Registering slash commands")
 		for i := range commandsList {
