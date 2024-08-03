@@ -49,9 +49,9 @@ func (c *PlayerInfoCommand) Execute(ctx *Context) bool {
 
 	var minecraftUsers []MinecraftUser
 	err = db.Model(&minecraftUsers).
-    InnerJoins("left join discord_minecraft_users on discord_minecraft_users.minecraft_user_id = discord_minecraft_users.minecraft_users.id").
-		Where("discord_users.discord_user_id = ?", discordId).
-    Find(&minecraftUsers).Error
+    InnerJoins("RIGHT JOIN discord_minecraft_users ON discord_minecraft_users.minecraft_user_id = minecraft_users.id").
+		Where("discord_minecraft_users.discord_user_id = ?", discordId).
+    Scan(&minecraftUsers).Error
 	if err != nil {
 		SendInternalError(err, ctx)
 		return false
