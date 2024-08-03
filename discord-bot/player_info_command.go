@@ -71,7 +71,7 @@ func (c *PlayerInfoCommand) Execute(ctx *Context) bool {
 		message += fmt.Sprintf("%s: %s\n", verificationStatus, user.Username)
 	}
 
-	e.SetTitle(fmt.Sprintf("Information about %s", discordId))
+	e.SetTitle(fmt.Sprintf("Information about <@%s>", discordId))
 	e.SetDescription(message)
 	ThemeEmbed(e, ctx)
 
