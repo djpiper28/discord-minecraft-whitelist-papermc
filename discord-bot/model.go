@@ -36,6 +36,7 @@ type DiscordUser struct {
 	Banned                bool                   `gorm:"index"`
 	DiscordUserID         string                 `gorm:"primaryKey"`
 	DiscordMinecraftUsers []DiscordMinecraftUser `gorm:"foreignKey:DiscordUserID"`
+	DisplayName           string
 }
 
 type DiscordMinecraftUser struct {
@@ -172,4 +173,8 @@ func Contains(arr []string, key string) bool {
 
 func UserIsAdmin(gs GuildSettings, user *discord.GuildMember) bool {
 	return Contains(user.Roles, gs.AdminRole)
+}
+
+func UpdateDisplayName(tx *gorm.DB, displayName string) error {
+  return tx.Model(&DiscordUser{}).Where("discord_user_id = ?", displayName).Update("display_name", displayName).Error
 }
