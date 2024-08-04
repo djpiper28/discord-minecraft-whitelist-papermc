@@ -83,7 +83,7 @@ public class Database {
         this.runOnDatabase((conn) -> {
             try {
                 PreparedStatement updateStatement = conn.prepareStatement("UPDATE minecraft_users " +
-                        "SET last_ip_address = ?, last_x, = ? last_y = ?, last_z = ? " +
+                        "SET last_ip_address = ?, last_x = ?, = ? last_y = ?, last_z = ? " +
                         "WHERE id = ?;");
                 updateStatement.setString(1, ipaddr.getHostAddress());
                 updateStatement.setDouble(2, x);
