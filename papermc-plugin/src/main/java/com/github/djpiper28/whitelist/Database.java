@@ -83,7 +83,7 @@ public class Database {
         this.runOnDatabase((conn) -> {
             try {
                 PreparedStatement updateStatement = conn.prepareStatement("UPDATE minecraft_users " +
-                        "SET last_ip_address = (?::INET), last_x = ?, last_y = ?, last_z = ? " +
+                        "SET last_x = ?, last_y = ?, last_z = ? " +
                         "WHERE id = ?;");
                 updateStatement.setString(1, ipaddr.getHostAddress());
                 updateStatement.setDouble(2, x);
@@ -120,7 +120,7 @@ public class Database {
                 PreparedStatement updateMinecraftUsernameCache = conn.prepareStatement("UPDATE minecraft_users SET username = ? WHERE id = ?;");
                 PreparedStatement getBannedStatus = conn.prepareStatement("SELECT discord_users.banned " +
                         "FROM discord_users " +
-                        "LEFT JOIN discord_minecraft_users ON discord_users.discord_user_id = discord_minecraft_users.discord_user_id " +
+                        "FULL OUTER JOIN discord_minecraft_users ON discord_users.discord_user_id = discord_minecraft_users.discord_user_id " +
                         "WHERE discord_minecraft_users.minecraft_user_id = ?;");
 
                 getMinecraftUserPs.setString(1, id);
@@ -131,14 +131,15 @@ public class Database {
 
                 getBannedStatus.setString(1, id);
                 ResultSet bannedStatus = getBannedStatus.executeQuery();
-                if (!bannedStatus.next()) {
-                    throw new UserNotFoundException();
+                boolean banned = false;
+                if (bannedStatus.next()) {
+                    banned = bannedStatus.getBoolean(1);
                 }
 
                 final MinecraftUser user = new MinecraftUser(res.getString("id"),
                         res.getString("username"),
                         res.getInt("verification_number"),
-                        bannedStatus.getBoolean(1),
+                        banned,
                         res.getBoolean("verified"));
 
                 if (!user.getUsername().equals(username)) {
