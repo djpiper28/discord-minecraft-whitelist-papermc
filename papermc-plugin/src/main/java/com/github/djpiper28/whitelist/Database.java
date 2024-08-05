@@ -85,11 +85,10 @@ public class Database {
                 PreparedStatement updateStatement = conn.prepareStatement("UPDATE minecraft_users " +
                         "SET last_x = ?, last_y = ?, last_z = ? " +
                         "WHERE id = ?;");
-                updateStatement.setString(1, ipaddr.getHostAddress());
-                updateStatement.setDouble(2, x);
-                updateStatement.setDouble(3, y);
-                updateStatement.setDouble(4, z);
-                updateStatement.setString(5, id);
+                updateStatement.setDouble(1, x);
+                updateStatement.setDouble(2, y);
+                updateStatement.setDouble(3, z);
+                updateStatement.setString(4, id);
                 updateStatement.executeUpdate();
             } catch (SQLException e) {
                 ex.set(e);
