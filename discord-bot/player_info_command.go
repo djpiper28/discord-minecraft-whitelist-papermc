@@ -69,7 +69,7 @@ func (c *PlayerInfoCommand) Execute(ctx *Context) bool {
 		if !user.Verified {
 			verificationStatus = "❌"
 		}
-		message += fmt.Sprintf("\n%s: `%s`\tlast logged in at <t:%d:f> at (%01f, %01f, %01f))\n",
+		message += fmt.Sprintf("\n%s: `%s`\tlast logged in at <t:%d:f> at (%02f, %02f, %02f)\n",
 			verificationStatus,
 			user.Username,
 			user.LastLoginTime.Unix(),
