@@ -83,14 +83,13 @@ public class Database {
         this.runOnDatabase((conn) -> {
             try {
                 PreparedStatement updateStatement = conn.prepareStatement("UPDATE minecraft_users " +
-                        "SET last_ip_address = (?::INET), last_x = ?, last_y = ?, last_z = ?, last_login_time = ? " +
+                        "SET last_x = ?, last_y = ?, last_z = ?, last_login_time = ? " +
                         "WHERE id = ?;");
-                updateStatement.setString(1, ipaddr.getHostAddress());
-                updateStatement.setDouble(2, x);
-                updateStatement.setDouble(3, y);
-                updateStatement.setDouble(4, z);
-                updateStatement.setTime(5, new Time(System.currentTimeMillis()));
-                updateStatement.setString(6, id);
+                updateStatement.setDouble(1, x);
+                updateStatement.setDouble(2, y);
+                updateStatement.setDouble(3, z);
+                updateStatement.setTime(4, new Time(System.currentTimeMillis()));
+                updateStatement.setString(5, id);
             } catch (SQLException e) {
                 ex.set(e);
             }
