@@ -29,6 +29,10 @@ func GetMinecraftUser(username string) (McUser, error) {
 		return McUser{}, err
 	}
 
+	if resp.StatusCode != http.StatusOK {
+		return McUser{}, fmt.Errorf("Minecraft API returned status code %d: %s", resp.StatusCode, body)
+	}
+
 	var user McUser
 	err = json.Unmarshal(body, &user)
 	if err != nil {
