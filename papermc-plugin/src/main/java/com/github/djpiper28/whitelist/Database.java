@@ -83,7 +83,7 @@ public class Database {
         this.runOnDatabase((conn) -> {
             try {
                 PreparedStatement updateStatement = conn.prepareStatement("UPDATE minecraft_users " +
-                        "SET last_x = ?, last_y = ?, last_z = ?, last_login_time = CURRENT_TIME(2) " +
+                        "SET last_x = ?, last_y = ?, last_z = ?, last_login_time = CURRENT_TIMESTAMP(2) " +
                         "WHERE id = ?;");
                 updateStatement.setDouble(1, x);
                 updateStatement.setDouble(2, y);
