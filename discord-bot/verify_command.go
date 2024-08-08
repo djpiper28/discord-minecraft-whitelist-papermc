@@ -126,6 +126,8 @@ func (c *VerifyCommand) Execute(ctx *Context) bool {
 			return err
 		}
 
+		// TODO: Delete all discord_minecraft_users entries where the minecraft_user_id is the same as the userLookup.Id and the discord_user_id is not the same as the ctx.interaction.Member.User.Id
+
 		return nil
 	})
 	if err != nil {

@@ -51,6 +51,7 @@ func main() {
 	// Add all commands here:
 	commandsList := []Command{
 		new(PlayerInfoCommand),
+		new(WhoIsCommand),
 		new(SetupCommand),
 		new(AddAccountCommand),
 		new(VerifyCommand),
@@ -80,7 +81,7 @@ func main() {
 		log.Print("Registering slash commands")
 		for i := range commandsList {
 			Register(commandsList[i], client, commands)
-      time.Sleep(time.Second)
+			time.Sleep(time.Second)
 		}
 
 		log.Print("Setting activity")

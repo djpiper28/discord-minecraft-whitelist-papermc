@@ -176,5 +176,5 @@ func UserIsAdmin(gs GuildSettings, user *discord.GuildMember) bool {
 }
 
 func UpdateDisplayName(tx *gorm.DB, displayName string) error {
-  return tx.Model(&DiscordUser{}).Where("discord_user_id = ?", displayName).Update("display_name", displayName).Error
+	return tx.Model(&DiscordUser{}).Where("discord_user_id = ?", displayName).Update("display_name", displayName).Error
 }
