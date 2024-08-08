@@ -89,6 +89,8 @@ public class Database {
                 updateStatement.setDouble(2, y);
                 updateStatement.setDouble(3, z);
                 updateStatement.setString(4, id);
+
+                updateStatement.executeUpdate();
             } catch (SQLException e) {
                 ex.set(e);
             }
