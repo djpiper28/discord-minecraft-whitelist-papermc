@@ -58,7 +58,7 @@ func (c *WhoIsCommand) Execute(ctx *Context) bool {
 		}
 
 		err = tx.Model(&minecraftUser).
-			Where("minecraft_user = ?", minecraftAccount.Id).
+			Where("id = ?", minecraftAccount.Id).
 			First(&minecraftUser).Error
 
 		if err != nil {
