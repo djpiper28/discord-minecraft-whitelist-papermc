@@ -125,7 +125,6 @@ func main() {
 	log.Print("Bot started")
 
 	go HealthCheckServer()
-
-	//go UpdateThread()
+	go UpdateThread(client)
 	select {}
 }

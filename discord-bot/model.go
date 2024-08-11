@@ -38,7 +38,7 @@ type DiscordUser struct {
 	DiscordMinecraftUsers []DiscordMinecraftUser `gorm:"foreignKey:DiscordUserID"`
 	DisplayName           string
 	// i.e: #ffffff
-  ColourHex string `gorm:"default:#ffffff"`
+	ColourHex string `gorm:"default:#ffffff"`
 }
 
 type DiscordMinecraftUser struct {
@@ -152,8 +152,10 @@ func SendInternalError(err error, ctx *Context) {
 	SendError(fmt.Sprintf("An internal error has occurred:\n```\n%s\n```", err), ctx)
 }
 
+const DISCORD_GUILD_ID = "DISCORD_GUILD_ID"
+
 func CheckGuild(ctx *Context) error {
-	requiredGuild := os.Getenv("DISCORD_GUILD_ID")
+	requiredGuild := os.Getenv(DISCORD_GUILD_ID)
 	guildid := ctx.interaction.GuildId
 	if guildid != requiredGuild {
 		SendWrongGuildError(ctx)
@@ -178,5 +180,34 @@ func UserIsAdmin(gs GuildSettings, user *discord.GuildMember) bool {
 }
 
 func UpdateDisplayName(tx *gorm.DB, displayName string) error {
-	return tx.Model(&DiscordUser{}).Where("discord_user_id = ?", displayName).Update("display_name", displayName).Error
+	return tx.Model(&DiscordUser{}).
+		Where("discord_user_id = ?", displayName).
+		Update("display_name", displayName).Error
+}
+
+func UpdateThread(client *gateway.Session) {
+	for {
+		guild, err := client.State().Guild(os.Getenv(DISCORD_GUILD_ID))
+		if err != nil {
+			log.Printf("Cannot find the DISCORD_GUILD_ID guild, %s.", err)
+			continue
+		}
+
+		members := guild.Members
+		log.Printf("Updating member list with %d members", len(members))
+
+		for _, member := range members {
+			log.Printf("Updating member %s", member.User.Username)
+
+			err = db.Model(&DiscordUser{}).
+				Where("discord_user_id = ?", member.User.Id).
+				Update("display_name", member.User.Username).Error
+
+			if err != nil {
+				log.Printf("Cannot update user %s in the database, %s", member.User.Username, err)
+			}
+		}
+
+		time.Sleep(time.Hour)
+	}
 }
