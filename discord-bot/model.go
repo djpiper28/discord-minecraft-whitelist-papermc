@@ -180,9 +180,11 @@ func UserIsAdmin(gs GuildSettings, user *discord.GuildMember) bool {
 }
 
 func UpdateDisplayName(tx *gorm.DB, user *discord.User) error {
-  if user == nil {
-    return errors.New("User is nil")
-  }
+	if user == nil {
+		log.Print("User is nil")
+		// This is non-fatal as the bot may be misconfigured
+		return nil
+	}
 
 	return tx.Model(&DiscordUser{}).
 		Where("discord_user_id = ?", user.Id).
@@ -204,7 +206,7 @@ func UpdateThread(client *gateway.Session) {
 		for _, member := range members {
 			log.Printf("Updating member %s", member.User.Username)
 
-      err = UpdateDisplayName(db, member.User)
+			err = UpdateDisplayName(db, member.User)
 			if err != nil {
 				log.Printf("Cannot update user %s in the database, %s", member.User.Username, err)
 			}
