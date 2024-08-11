@@ -49,7 +49,12 @@ func (c *WhoIsCommand) Execute(ctx *Context) bool {
 	var discordMinecraftUsers []DiscordMinecraftUser
 	var minecraftUser MinecraftUser
 	err = db.Transaction(func(tx *gorm.DB) error {
-		err := tx.Model(&discordMinecraftUsers).
+    err := UpdateDisplayName(tx, ctx.interaction.User.Username)
+		if err != nil {
+			return err
+		}
+
+		err = tx.Model(&discordMinecraftUsers).
 			Where("minecraft_user_id = ?", minecraftAccount.Id).
 			Find(&discordMinecraftUsers).Error
 

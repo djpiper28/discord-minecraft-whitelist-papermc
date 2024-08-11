@@ -37,6 +37,8 @@ type DiscordUser struct {
 	DiscordUserID         string                 `gorm:"primaryKey"`
 	DiscordMinecraftUsers []DiscordMinecraftUser `gorm:"foreignKey:DiscordUserID"`
 	DisplayName           string
+	// i.e: #ffffff
+	ColourHex string
 }
 
 type DiscordMinecraftUser struct {

@@ -52,10 +52,15 @@ func (c *VerifyCommand) Execute(ctx *Context) bool {
 	guildid := ctx.interaction.GuildId
 
 	err := db.Transaction(func(tx *gorm.DB) error {
+    err := UpdateDisplayName(tx, ctx.interaction.User.Username)
+		if err != nil {
+			return err
+		}
+
 		// Get guild settings
 		var gs GuildSettings
 		minecraftUserModel := tx.Model(&gs)
-		err := minecraftUserModel.Error
+		err = minecraftUserModel.Error
 		if err != nil {
 			return err
 		}

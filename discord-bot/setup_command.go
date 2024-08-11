@@ -72,6 +72,11 @@ func (c *SetupCommand) Execute(ctx *Context) bool {
 	guildid := ctx.interaction.GuildId
 
 	err := db.Transaction(func(tx *gorm.DB) error {
+    err := UpdateDisplayName(tx, ctx.interaction.User.Username)
+		if err != nil {
+			return err
+		}
+
 		dest := GuildSettings{
 			ID:                     guildid,
 			AdminRole:              adminRole,
@@ -81,7 +86,7 @@ func (c *SetupCommand) Execute(ctx *Context) bool {
 		}
 
 		mdl := tx.Model(&dest)
-		err := mdl.Error
+		err = mdl.Error
 		if err != nil {
 			return err
 		}

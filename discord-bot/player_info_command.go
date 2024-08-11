@@ -47,6 +47,11 @@ func (c *PlayerInfoCommand) Execute(ctx *Context) bool {
 		return false
 	}
 
+	err = UpdateDisplayName(db, ctx.interaction.User.Username)
+	if err != nil {
+		return false
+	}
+
 	var minecraftUsers []MinecraftUser
 	err = db.Model(&minecraftUsers).
 		InnerJoins("RIGHT JOIN discord_minecraft_users ON discord_minecraft_users.minecraft_user_id = minecraft_users.id").
