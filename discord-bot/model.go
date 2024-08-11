@@ -179,10 +179,14 @@ func UserIsAdmin(gs GuildSettings, user *discord.GuildMember) bool {
 	return Contains(user.Roles, gs.AdminRole)
 }
 
-func UpdateDisplayName(tx *gorm.DB, displayName string) error {
+func UpdateDisplayName(tx *gorm.DB, user *discord.User) error {
+  if user == nil {
+    return errors.New("User is nil")
+  }
+
 	return tx.Model(&DiscordUser{}).
-		Where("discord_user_id = ?", displayName).
-		Update("display_name", displayName).Error
+		Where("discord_user_id = ?", user.Id).
+		Update("display_name", user.Username).Error
 }
 
 func UpdateThread(client *gateway.Session) {
@@ -200,10 +204,7 @@ func UpdateThread(client *gateway.Session) {
 		for _, member := range members {
 			log.Printf("Updating member %s", member.User.Username)
 
-			err = db.Model(&DiscordUser{}).
-				Where("discord_user_id = ?", member.User.Id).
-				Update("display_name", member.User.Username).Error
-
+      err = UpdateDisplayName(db, member.User)
 			if err != nil {
 				log.Printf("Cannot update user %s in the database, %s", member.User.Username, err)
 			}

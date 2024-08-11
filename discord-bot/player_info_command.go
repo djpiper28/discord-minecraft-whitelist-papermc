@@ -47,7 +47,7 @@ func (c *PlayerInfoCommand) Execute(ctx *Context) bool {
 		return false
 	}
 
-	err = UpdateDisplayName(db, ctx.interaction.User.Username)
+	err = UpdateDisplayName(db, ctx.interaction.User)
 	if err != nil {
 		return false
 	}
