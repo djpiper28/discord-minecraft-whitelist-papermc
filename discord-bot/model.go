@@ -190,6 +190,7 @@ func UpdateThread(client *gateway.Session) {
 		guild, err := client.State().Guild(os.Getenv(DISCORD_GUILD_ID))
 		if err != nil {
 			log.Printf("Cannot find the DISCORD_GUILD_ID guild, %s.", err)
+			time.Sleep(time.Minute * 5)
 			continue
 		}
 
